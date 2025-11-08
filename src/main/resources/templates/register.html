@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8" />
+    <title>Register</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}" />
+    </head>
+<body>
+<div class="container">
+    <h1>Register (Teacher)</h1>
+    <div th:if="${error}" class="error" th:text="${error}"></div>
+    <form th:action="@{/register}" method="post">
+        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+        <div>
+            <label>Username</label>
+            <input type="text" name="username" required />
+        </div>
+        <div>
+            <label>First name</label>
+            <input type="text" name="firstName" />
+        </div>
+        <div>
+            <label>Last name</label>
+            <input type="text" name="lastName" />
+        </div>
+        <div>
+            <label>Age</label>
+            <input type="text" name="age" />
+        </div>
+        <div>
+            <label>Phone</label>
+            <input type="text" name="phone" />
+        </div>
+        <!-- Course removed from registration. Teachers may teach multiple courses and will select a course in the dashboard when marking attendance. -->
+        <div>
+            <label>Password</label>
+            <input type="password" name="password" required />
+        </div>
+        <div>
+            <label>Confirm Password</label>
+            <input type="password" name="confirm" required />
+        </div>
+        <div>
+            <button type="submit">Register</button>
+        </div>
+    </form>
+    <p>Already have an account? <a th:href="@{/login}">Login</a></p>
+</div>
+</body>
+</html>

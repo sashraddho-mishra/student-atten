@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8" />
+    <title>Attendance Report</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}" />
+</head>
+<body>
+<div class="container">
+    <h1>Attendance Report</h1>
+
+    <form method="get" th:action="@{/teacher/attendance/report}">
+        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+        <div>
+            <label>Subject/Course</label>
+            <select name="subjectId">
+                <option th:each="sub : ${subjects}" th:value="${sub.id}" th:text="${sub.name}"
+                        th:selected="${selectedSubjectId != null} ? ${sub.id} == ${selectedSubjectId} : false"></option>
+            </select>
+        </div>
+        <div>
+            <label>Date</label>
+            <input type="date" name="date" th:value="${date}" />
+        </div>
+        <div>
+            <button type="submit">Show</button>
+        </div>
+    </form>
+
+    <div th:if="${subject}">
+        <h2 th:text="'Report for ' + ${subject.name} + ' on ' + ${date}"></h2>
+    </div>
+
+    <table>
+        <thead>
+        <tr><th>#</th><th>Name</th><th>Roll</th><th>Present</th></tr>
+        </thead>
+        <tbody>
+        <tr th:each="s,iterStat : ${students}">
+            <td th:text="${iterStat.index + 1}"></td>
+            <td th:text="${s.name}"></td>
+            <td th:text="${s.rollNumber}"></td>
+            <td th:text="${presentMap.containsKey(s.id)} ? (presentMap[s.id] ? 'Present' : 'Absent') : 'Absent'"></td>
+        </tr>
+        </tbody>
+    </table>
+
+    <p><a th:href="@{/teacher/dashboard}">Back</a></p>
+</div>
+</body>
+</html>

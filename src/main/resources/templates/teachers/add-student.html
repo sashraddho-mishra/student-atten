@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8" />
+    <title>Add Student</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}" />
+    </head>
+<body>
+<div class="container">
+    <h1>Add Student</h1>
+    <form th:action="@{/teacher/students/add}" method="post">
+        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+        <div th:if="${error}" class="error" th:text="${error}"></div>
+        <div>
+            <label>Name</label>
+            <input type="text" name="name" required />
+        </div>
+        <div>
+            <label>Roll Number</label>
+            <input type="text" name="rollNumber" required />
+        </div>
+        <div th:if="${course}">
+            <label>Course</label>
+            <input type="text" name="course" th:value="${course}" readonly />
+        </div>
+        <div th:if="${course == null}">
+            <label>Course</label>
+            <input type="text" name="course" />
+        </div>
+        <div>
+            <button type="submit">Add</button>
+        </div>
+    </form>
+    <p><a th:href="@{/teacher/students}">Back</a></p>
+</div>
+</body>
+</html>

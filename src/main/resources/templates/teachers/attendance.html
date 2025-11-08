@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8" />
+    <title>Mark Attendance</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}" />
+    </head>
+<body>
+<div class="container">
+    <h1>Mark Attendance</h1>
+    <form th:action="@{/teacher/attendance/mark}" method="post">
+        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+        <div>
+            <label>Student</label>
+            <select name="studentId">
+                <option th:each="s : ${students}" th:value="${s.id}" th:text="${s.name + ' (' + s.rollNumber + ')'}"></option>
+            </select>
+        </div>
+        <div>
+            <label>Subject</label>
+            <select name="subjectId">
+                <option th:each="sub : ${subjects}" th:value="${sub.id}" th:text="${sub.name}"></option>
+            </select>
+        </div>
+        <div>
+            <label>Date</label>
+            <input type="date" name="date" />
+        </div>
+        <div>
+            <label>Present</label>
+            <!-- hidden default false; checkbox will set true when checked -->
+            <input type="hidden" name="present" value="false" />
+            <input type="checkbox" name="present" value="true" checked />
+        </div>
+        <div>
+            <button type="submit">Mark</button>
+        </div>
+    </form>
+    <p><a th:href="@{/teacher/dashboard}">Back</a></p>
+</div>
+</body>
+</html>
