@@ -2,50 +2,66 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8" />
-    <title>Attendance Report</title>
+    <title>Attendance Report - Student Attendance</title>
     <link rel="stylesheet" th:href="@{/css/style.css}" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
 </head>
 <body>
 <div class="container">
     <h1>Attendance Report</h1>
 
-    <form method="get" th:action="@{/teacher/attendance/report}">
-        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
-        <div>
-            <label>Subject/Course</label>
-            <select name="subjectId">
-                <option th:each="sub : ${subjects}" th:value="${sub.id}" th:text="${sub.name}"
-                        th:selected="${selectedSubjectId != null} ? ${sub.id} == ${selectedSubjectId} : false"></option>
-            </select>
-        </div>
-        <div>
-            <label>Date</label>
-            <input type="date" name="date" th:value="${date}" />
-        </div>
-        <div>
-            <button type="submit">Show</button>
-        </div>
-    </form>
+    <div class="subject-selector">
+        <form method="get" th:action="@{/teacher/attendance/report}">
+            <div class="form-group" style="margin-bottom: 0;">
+                <label>Subject/Course</label>
+                <select name="subjectId" required>
+                    <option value="">-- Select a subject --</option>
+                    <option th:each="sub : ${subjects}" th:value="${sub.id}" th:text="${sub.name}"
+                            th:selected="${selectedSubjectId != null} ? ${sub.id} == ${selectedSubjectId} : false"></option>
+                </select>
+            </div>
+            <div class="form-group" style="margin-bottom: 0;">
+                <label>Date</label>
+                <input type="date" name="date" th:value="${date}" required />
+            </div>
+            <button type="submit">Generate Report</button>
+        </form>
+    </div>
 
-    <div th:if="${subject}">
+    <div th:if="${subject}" style="margin-top: 24px;">
         <h2 th:text="'Report for ' + ${subject.name} + ' on ' + ${date}"></h2>
     </div>
 
-    <table>
+    <table th:if="${students != null and !students.isEmpty()}">
         <thead>
-        <tr><th>#</th><th>Name</th><th>Roll</th><th>Present</th></tr>
+        <tr>
+            <th>#</th>
+            <th>Student Name</th>
+            <th>Roll Number</th>
+            <th>Status</th>
+        </tr>
         </thead>
         <tbody>
         <tr th:each="s,iterStat : ${students}">
             <td th:text="${iterStat.index + 1}"></td>
             <td th:text="${s.name}"></td>
             <td th:text="${s.rollNumber}"></td>
-            <td th:text="${presentMap.containsKey(s.id)} ? (presentMap[s.id] ? 'Present' : 'Absent') : 'Absent'"></td>
+            <td>
+                <span th:if="${presentMap.containsKey(s.id)} and ${presentMap[s.id]}" class="status-present">Present</span>
+                <span th:if="${!presentMap.containsKey(s.id) or !presentMap[s.id]}" class="status-absent">Absent</span>
+            </td>
         </tr>
         </tbody>
     </table>
 
-    <p><a th:href="@{/teacher/dashboard}">Back</a></p>
+    <div th:if="${students != null and students.isEmpty()}" style="text-align: center; color: #718096; padding: 40px; background: #f7fafc; border-radius: 8px; margin-top: 24px;">
+        No attendance records found for the selected criteria.
+    </div>
+
+    <div class="nav">
+        <a th:href="@{/teacher/dashboard}">Back to Dashboard</a>
+        <a th:href="@{/teacher/students}">View Students</a>
+    </div>
 </div>
 </body>
 </html>

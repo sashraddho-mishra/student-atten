@@ -99,8 +99,11 @@ public class TeacherController {
     }
 
     @PostMapping("/students/delete/{id}")
-    public String deleteStudent(@PathVariable Long id) {
+    public String deleteStudent(@PathVariable Long id, @RequestParam(required = false) Long subjectId) {
         studentService.delete(id);
+        if (subjectId != null) {
+            return "redirect:/teacher/dashboard?subjectId=" + subjectId;
+        }
         return "redirect:/teacher/dashboard";
     }
 
